@@ -1,0 +1,10 @@
+Package: logMsg
+Title: Log Message in parallel R program.
+Version: 0.1
+Authors@R: c(person("Jingshu", "Wang", email = "wangjingshususan@gmail.com", role = c("aut", "cre")),person("Luchang", "Jin", email = "ljin.luchang@gmail.com", role = c("aut")))
+Description: Log Message in parallel R program.
+Depends: R (>= 3.1.0)
+License: GPL-3
+NeedsCompilation: yes
+Encoding: UTF-8
+LazyData: true
