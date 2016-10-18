@@ -22,7 +22,7 @@ logMsg.setup <- function(cl, logDir) {
   assign("logMsg.counter", 0, envir = .GlobalEnv)
   assign("logMsg.filename", logDir, envir = .GlobalEnv)
   assign("logMsg.machine", 0, envir = .GlobalEnv)
-  assign("logMsg", function(msg)
+  assign("logMsg", function(msg, append = TRUE)
          {
            assign("logMsg.counter", logMsg.counter + 1, envir = .GlobalEnv)
            tmsg = paste(strptime(Sys.time(), format = "%F%T"),
@@ -31,7 +31,7 @@ logMsg.setup <- function(cl, logDir) {
                         logMsg.counter,
                         ":",
                         toString(msg))
-           write(tmsg, logMsg.filename, append = T)
+           write(tmsg, logMsg.filename, append = append)
            if (logMsg.machine == 0) {
              print(tmsg);
            }
@@ -66,4 +66,9 @@ logMsg.setup <- function(cl, logDir) {
               }, getwd())
   logMsg("logMsg Setup Done")
   logMsg(getwd())
+}
+
+logMsg.clear <- function(cl, msg = "Msg cleared.") {
+  logMsg(msg, append=F)
+  clusterCall(cl, logMsg, msg, append=F)
 }
