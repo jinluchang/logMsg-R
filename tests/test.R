@@ -19,17 +19,17 @@ logMsg.setup(cl, "./logs")
 
 if (TRUE) {
 
-  RNG.set.seed.state("132433")
-  RNG.sync(cl)
+  setSeedRngState("132433")
+  syncRng(cl)
 
   {
 
     clusterEvalQ(cl, logMsg("lapply"))
 
-    "rnorm9" %RNG.split.eval% {
+    "rnorm9" %splitRngEval% {
       lapply(1:9, function(i)
              {
-               i %RNG.split.eval% {
+               i %splitRngEval% {
                  logMsg(paste(i, rnorm(2)))
                }
              })
@@ -39,8 +39,8 @@ if (TRUE) {
 
     parLapply(cl, 1:9, function(i)
               {
-                "rnorm9" %RNG.split.eval% {
-                  i %RNG.split.eval% {
+                "rnorm9" %splitRngEval% {
+                  i %splitRngEval% {
                     logMsg(paste(i, rnorm(2)))
                   }
                 }
@@ -48,11 +48,11 @@ if (TRUE) {
 
     clusterEvalQ(cl, logMsg("parLapply"))
 
-    "rnorm9" %RNG.split.eval% {
-      RNG.sync(cl)
+    "rnorm9" %splitRngEval% {
+      syncRng(cl)
       parLapply(cl, 1:9, function(i)
                 {
-                  i %RNG.split.eval% {
+                  i %splitRngEval% {
                     logMsg(paste(i, rnorm(2)))
                   }
                 })
@@ -66,14 +66,14 @@ if (TRUE) {
 
 TestParRNG <- function() {
   require(shaRNG)
-  RNG.set.seed.state("132433")
-  RNG.jump("rnorm9")
+  setSeedRngState("132433")
+  jumpRng("rnorm9")
   n <- 9
-  sub.states <- GetSplitStates(n)$sub.states
+  sub.states <- getSplitStates(n)$sub.states
 
   result.par <- parSapply(cl, 1:n, function(i) {
                           require(shaRNG)
-                          RNG.set.state(sub.states[[i]])
+                          setRngState(sub.states[[i]])
                           # logMsg(sub.states[[i]])
                           # logMsg(sub.states[[i]])
                           return(rnorm(2))
@@ -82,7 +82,7 @@ TestParRNG <- function() {
 
   result <- sapply(1:n, function(i) {
                    require(shaRNG)
-                   RNG.set.state(sub.states[[i]])
+                   setRngState(sub.states[[i]])
                    return(rnorm(2))
                 })
   print(result)
