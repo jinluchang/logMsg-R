@@ -19,6 +19,7 @@
 
 logMsg.setup <- function(cl, logDir) {
   dir.create(logDir, recursive = TRUE, mode = "0755")
+  assign("logMsg.cl", cl, envir = .GlobalEnv)
   assign("logMsg.counter", 0, envir = .GlobalEnv)
   assign("logMsg.filename", logDir, envir = .GlobalEnv)
   assign("logMsg.machine", 0, envir = .GlobalEnv)
@@ -68,7 +69,7 @@ logMsg.setup <- function(cl, logDir) {
   logMsg(getwd())
 }
 
-logMsg.clear <- function(cl, msg = "Msg cleared.") {
+logMsg.clear <- function(msg = "Msg cleared.") {
   logMsg(msg, append=F)
-  clusterCall(cl, logMsg, msg, append=F)
+  clusterCall(logMsg.cl, logMsg, msg, append=F)
 }
